@@ -12,9 +12,7 @@ export const contactsListQuery = gql`
 `;
 
 const Contacts = () => {
-  const {
-    data: { loading, error, contacts },
-  } = useQuery(contactsListQuery);
+  const { loading, error, data } = useQuery(contactsListQuery);
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -25,7 +23,7 @@ const Contacts = () => {
 
   return (
     <ul>
-      {contacts.map((item) => (
+      {data?.contacts?.map((item) => (
         <li key={item.id}>
           {item.firstName} {item.lastName}
         </li>

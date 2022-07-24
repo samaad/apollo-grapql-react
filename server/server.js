@@ -23,7 +23,7 @@ async function startApolloServer(typeDefs, resolvers) {
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
-  app.use("*", cors({ origin: "http://localhost:3000" }));
+  app.use("*", cors());
 
   await server.start();
   server.applyMiddleware({ app });

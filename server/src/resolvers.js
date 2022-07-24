@@ -20,4 +20,17 @@ export const resolvers = {
   Query: {
     contacts: () => contacts,
   },
+  Mutation: {
+    addContact: (root, args) => {
+      console.log(args);
+      const newId = require("crypto").randomBytes(5).toString("hex");
+      const newContact = {
+        id: newId,
+        firstName: args.firstName,
+        lastName: args.lastName,
+      };
+      contacts.push(newContact);
+      return newContact;
+    },
+  },
 };
