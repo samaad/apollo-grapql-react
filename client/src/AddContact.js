@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { contactsListQuery } from "./Contacts";
+import { v4 as uuidv4 } from "uuid";
 
 const CREATE_CONTACT = gql`
-  mutation addContact($firstName: String!, $lastName: String!) {
-    addContact(firstName: $firstName, lastName: $lastName) {
+  mutation addContact($id: String!, $firstName: String!, $lastName: String!) {
+    addContact(id: $id, firstName: $firstName, lastName: $lastName) {
       id
       firstName
       lastName
@@ -18,8 +19,17 @@ const AddContacts = (props) => {
 
   const handleSave = () => {
     const { firstName, lastName } = state;
+    const id = uuidv4();
     addContact({
-      variables: { firstName, lastName },
+      variables: { id, firstName, lastName },
+      optimisticResponse: {
+        addContact: {
+          id,
+          firstName,
+          lastName,
+          __typename: "Contact",
+        },
+      },
       update: (cache, { data: { addContact } }) => {
         const result = cache.readQuery({ query: contactsListQuery });
         cache.writeQuery({
